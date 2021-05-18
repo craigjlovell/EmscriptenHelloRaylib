@@ -34,8 +34,8 @@ var Module = typeof Module !== 'undefined' ? Module : {};
       } else {
         throw 'using preloaded data can only be done on a web page or in a web worker';
       }
-      var PACKAGE_NAME = '../../../bin/Emscripten/HelloRaylib/HelloRaylib.data';
-      var REMOTE_PACKAGE_BASE = 'HelloRaylib.data';
+      var PACKAGE_NAME = '../../../bin/Emscripten/TicTacToe/TicTacToe.data';
+      var REMOTE_PACKAGE_BASE = 'TicTacToe.data';
       if (typeof Module['locateFilePackage'] === 'function' && !Module['locateFile']) {
         Module['locateFile'] = Module['locateFilePackage'];
         err('warning: you defined Module.locateFilePackage, that has been renamed to Module.locateFile (using your locateFilePackage for now)');
@@ -163,10 +163,10 @@ var Module = typeof Module !== 'undefined' ? Module : {};
             for (var i = 0; i < files.length; ++i) {
               DataRequest.prototype.requests[files[i].filename].onload();
             }
-                Module['removeRunDependency']('datafile_../../../bin/Emscripten/HelloRaylib/HelloRaylib.data');
+                Module['removeRunDependency']('datafile_../../../bin/Emscripten/TicTacToe/TicTacToe.data');
 
       };
-      Module['addRunDependency']('datafile_../../../bin/Emscripten/HelloRaylib/HelloRaylib.data');
+      Module['addRunDependency']('datafile_../../../bin/Emscripten/TicTacToe/TicTacToe.data');
     
       if (!Module.preloadResults) Module.preloadResults = {};
     
@@ -187,7 +187,7 @@ var Module = typeof Module !== 'undefined' ? Module : {};
     }
   
    }
-   loadPackage({"files": [{"filename": "/assets/.gitkeep", "start": 0, "end": 0, "audio": 0}], "remote_package_size": 0, "package_uuid": "1e6a0637-711e-436d-8991-5bb69306aa7e"});
+   loadPackage({"files": [{"filename": "/assets/.gitkeep", "start": 0, "end": 0, "audio": 0}], "remote_package_size": 0, "package_uuid": "90c62c61-928b-483e-8ea7-3a4b68e75699"});
   
   })();
   
@@ -1698,7 +1698,7 @@ function createExportWrapper(name, fixedasm) {
   };
 }
 
-var wasmBinaryFile = 'HelloRaylib.wasm';
+var wasmBinaryFile = 'TicTacToe.wasm';
 if (!isDataURI(wasmBinaryFile)) {
   wasmBinaryFile = locateFile(wasmBinaryFile);
 }
