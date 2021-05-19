@@ -17,13 +17,15 @@ public:
 	Game();
 	~Game();
 
+	void Sound();
+
 	void ResetBall();
 	void ResetPaddle();
 
 	void UpdateBall(Ball* b);
 	void UpdatePaddle(Paddle* p);
 
-	void PaddleCol(Paddle* p, Ball* b);
+	bool PaddleCol(Paddle* p, Ball* b);
 
 	void Load();
 	void UnLoad();

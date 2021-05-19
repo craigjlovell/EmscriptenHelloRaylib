@@ -16,6 +16,13 @@ Game::~Game()
 
 }
 
+void Game::Sound()
+{
+    InitAudioDevice();
+    ballHit = LoadSound("");
+    audio
+}
+
 void Game::ResetBall()
 {
 	m_ball->pos.x = windowWidth / 2;
@@ -29,22 +36,43 @@ void Game::ResetPaddle()
 
     m_rightPaddle->pos.x = windowWidth - 50;
     m_rightPaddle->pos.y = windowHeight / 2.0f;
+
+
 }
 
-void Game::PaddleCol(Paddle* p, Ball* b)
+bool Game::PaddleCol(Paddle* p, Ball* b)
 {
-    float top = p->pos.y - 100 / 2;
-    float bottom = p->pos.y + 100 / 2;
-    float right = p->pos.x + 10 / 2;
-    float left = p->pos.x - 10/ 2;
+    float pTop = p->pos.y;
+    float pBottom = p->pos.y + p->size.y;
+    float pRight = p->pos.x + p->size.x;
+    float pLeft = p->pos.x;
 
-    if (b->pos.y >= top && b->pos.y <= bottom && b->pos.x >= left && b->pos.x <= right)
+    float bTop = b->pos.y;
+    float bBottom = b->pos.y + b->radius * 2;
+    float bRight = b->pos.x + b->radius * 2;
+    float bLeft = b->pos.x;
+
+    if (bLeft >= pRight)
     {
-
-        b->dir.x = -b->dir.x;
-        b->speed = b->speed * 1.05f;
-
+        return false;
     }
+
+    if (bRight <= pLeft)
+    {
+        return false;
+    }
+
+    if (bTop >= pBottom)
+    {
+        return false;
+    }
+
+    if (bBottom <= pTop)
+    {
+        return false;
+    }
+
+    return true;
 }
 
 void Game::UpdateBall(Ball* b)
@@ -140,6 +168,12 @@ void Game::Update()
 
 void Game::UpdateGame()
 {
+    if (PaddleCol(m_leftPaddle, m_ball) ||
+        PaddleCol(m_rightPaddle, m_ball))
+    {
+        m_ball->dir.x = -m_ball->dir.x;
+    }
+
     UpdateBall(m_ball);
     UpdatePaddle(m_leftPaddle);
     UpdatePaddle(m_rightPaddle);
@@ -162,7 +196,7 @@ void Game::DrawBall(Ball* b)
 void Game::DrawPaddle(Paddle* p)
 {
     
-    Rectangle dstRect = { p->pos.x, p->pos.y, 10, 100 };
+    Rectangle dstRect = { p->pos.x, p->pos.y, p->size.x, p->size.y };
     Vector2 origin = { dstRect.width / 2, dstRect.height / 2 };
     DrawRectanglePro(dstRect, origin, 0.0f, GOLD);
 }
