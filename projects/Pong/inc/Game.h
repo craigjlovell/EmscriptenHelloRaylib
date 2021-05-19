@@ -20,12 +20,16 @@ public:
 	void ResetBall();
 	void ResetPaddle();
 
-	void UpdateBall();
+	void UpdateBall(Ball* b);
+	void UpdatePaddle(Paddle* p);
+
+	void PaddleCol(Paddle* p, Ball* b);
 
 	void Load();
 	void UnLoad();
 
 	void Update();
+	void UpdateGame();
 	void Draw();
 
 	void DrawBall(Ball* b);

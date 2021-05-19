@@ -1,5 +1,6 @@
 #include "Game.h"
 #include "raylib.h"
+#include "raymath.h"
 #include "Ball.h"
 #include "Paddle.h"
 
@@ -30,12 +31,28 @@ void Game::ResetPaddle()
     m_rightPaddle->pos.y = windowHeight / 2.0f;
 }
 
-void Game::UpdateBall()
+void Game::PaddleCol(Paddle* p, Ball* b)
 {
-    m_ball->pos.x += m_ball->dir.x * m_ball->speed;
-    m_ball->pos.y -= m_ball->dir.y * m_ball->speed;
+    float top = p->pos.y - 100 / 2;
+    float bottom = p->pos.y + 100 / 2;
+    float right = p->pos.x + 10 / 2;
+    float left = p->pos.x - 10/ 2;
 
-    if (m_ball->pos.x < 0)
+    if (b->pos.y >= top && b->pos.y <= bottom && b->pos.x >= left && b->pos.x <= right)
+    {
+
+        b->dir.x = -b->dir.x;
+        b->speed = b->speed * 1.05f;
+
+    }
+}
+
+void Game::UpdateBall(Ball* b)
+{
+    b->pos.x += b->dir.x * b->speed;
+    b->pos.y -= b->dir.y * b->speed;
+
+    if (b->pos.x < 0)
     {
         ResetBall();
 
@@ -48,7 +65,7 @@ void Game::UpdateBall()
         }
 
     }
-    if (m_ball->pos.x > windowWidth)
+    if (b->pos.x > windowWidth)
     {
         ResetBall();
 
@@ -60,12 +77,23 @@ void Game::UpdateBall()
             ResetPaddle();
         }
     }
-    if (m_ball->pos.y < 0)       m_ball->dir.y = -m_ball->dir.y;
-    if (m_ball->pos.y > windowHeight) m_ball->dir.y = -m_ball->dir.y;
+    if (b->pos.y < 0)       b->dir.y = -b->dir.y;
+    if (b->pos.y > windowHeight) b->dir.y = -b->dir.y;
 
 }
 
+void Game::UpdatePaddle(Paddle* p)
+{
+    if (IsKeyDown(p->upKey))
+    {
+        p->pos.y -= p->speed;
+    }
 
+    if (IsKeyDown(p->downKey))
+    {
+        p->pos.y += p->speed;
+    }
+}
 
 void Game::Load()
 {
@@ -102,12 +130,21 @@ void Game::UnLoad()
 void Game::Update()
 {
 	BeginDrawing();
-	ClearBackground(RAYWHITE);
+	ClearBackground(SKYBLUE);
 
-    UpdateBall();
+    UpdateGame();
 	DrawFPS(10, 10);
 
 	EndDrawing();
+}
+
+void Game::UpdateGame()
+{
+    UpdateBall(m_ball);
+    UpdatePaddle(m_leftPaddle);
+    UpdatePaddle(m_rightPaddle);
+    PaddleCol(m_leftPaddle, m_ball);
+    PaddleCol(m_rightPaddle, m_ball);
 }
 
 void Game::Draw()
@@ -119,12 +156,14 @@ void Game::Draw()
 
 void Game::DrawBall(Ball* b)
 {
-
 	DrawCircle((int)b->pos.x, (int)b->pos.y, b->radius, RED);
 }
 
 void Game::DrawPaddle(Paddle* p)
 {
-    DrawRectangle(p->pos.x, p->pos.y, 10, 100, GOLD);
+    
+    Rectangle dstRect = { p->pos.x, p->pos.y, 10, 100 };
+    Vector2 origin = { dstRect.width / 2, dstRect.height / 2 };
+    DrawRectanglePro(dstRect, origin, 0.0f, GOLD);
 }
 
