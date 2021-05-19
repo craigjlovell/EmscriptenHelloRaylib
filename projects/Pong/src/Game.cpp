@@ -18,9 +18,9 @@ Game::~Game()
 
 void Game::Sound()
 {
-    InitAudioDevice();
-    ballHit = LoadSound("");
-    audio
+    //InitAudioDevice();
+    //ballHit = LoadSound("");
+    //audio
 }
 
 void Game::ResetBall()
